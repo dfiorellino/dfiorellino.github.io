@@ -2,4 +2,39 @@
 title: "My Website"
 ---
 
-Hello, Website!
+Hello, bienvenidos!
+
+# Sección de contenido
+
+Aquí va el texto y los elementos que quieres incluir en tu sitio web.
+
+```{r}
+# Formulario generado por la función htmltools::HTML()
+
+htmltools::HTML('
+<form>
+  <label for="barrio">Barrio:</label>
+  <input type="text" id="barrio" name="barrio"><br><br>
+  <label for="precio">Precio:</label>
+  <input type="text" id="precio" name="precio"><br><br>
+  <label for="fecha">Fecha:</label>
+  <input type="date" id="fecha" name="fecha"><br><br>
+  <label for="min_noches">Mínimo de noches:</label>
+  <input type="text" id="min_noches" name="min_noches"><br><br>
+  <label for="max_noches">Máximo de noches:</label>
+  <input type="text" id="max_noches" name="max_noches"><br><br>
+  <label for="huespedes">Huéspedes:</label>
+  <input type="text" id="huespedes" name="huespedes"><br><br>
+  <label for="porcentajeR">Porcentaje de reservas:</label>
+  <input type="text" id="porcentajeR" name="porcentajeR"><br><br>
+  <label for="puntaje">Puntaje:</label>
+  <input type="text" id="puntaje" name="puntaje"><br><br>
+  <label for="es_finde">¿Es fin de semana?:</label>
+  <input type="checkbox" id="es_finde" name="es_finde"><br><br>
+  <input type="button" value="Obtener predicción" onclick="procesar_valores()"><br><br>
+</form>
+')
+
+
+```
+
