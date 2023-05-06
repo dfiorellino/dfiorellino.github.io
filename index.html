@@ -13,7 +13,7 @@
 
 <title>My Website</title>
 
-<script src="site_libs/header-attrs-2.11/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
@@ -60,6 +60,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -80,6 +81,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -137,11 +141,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -170,8 +178,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -179,16 +187,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -232,7 +233,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -264,7 +265,60 @@ $(document).ready(function () {
 </div>
 
 
-<p>Hello, Website!</p>
+<p>Hello, bienvenidos!</p>
+<div id="sección-de-contenido" class="section level1">
+<h1>Sección de contenido</h1>
+<p>Aquí va el texto y los elementos que quieres incluir en tu sitio
+web.</p>
+<pre class="r"><code># Formulario generado por la función htmltools::HTML()
+
+htmltools::HTML(&#39;
+&lt;form&gt;
+  &lt;label for=&quot;barrio&quot;&gt;Barrio:&lt;/label&gt;
+  &lt;input type=&quot;text&quot; id=&quot;barrio&quot; name=&quot;barrio&quot;&gt;&lt;br&gt;&lt;br&gt;
+  &lt;label for=&quot;precio&quot;&gt;Precio:&lt;/label&gt;
+  &lt;input type=&quot;text&quot; id=&quot;precio&quot; name=&quot;precio&quot;&gt;&lt;br&gt;&lt;br&gt;
+  &lt;label for=&quot;fecha&quot;&gt;Fecha:&lt;/label&gt;
+  &lt;input type=&quot;date&quot; id=&quot;fecha&quot; name=&quot;fecha&quot;&gt;&lt;br&gt;&lt;br&gt;
+  &lt;label for=&quot;min_noches&quot;&gt;Mínimo de noches:&lt;/label&gt;
+  &lt;input type=&quot;text&quot; id=&quot;min_noches&quot; name=&quot;min_noches&quot;&gt;&lt;br&gt;&lt;br&gt;
+  &lt;label for=&quot;max_noches&quot;&gt;Máximo de noches:&lt;/label&gt;
+  &lt;input type=&quot;text&quot; id=&quot;max_noches&quot; name=&quot;max_noches&quot;&gt;&lt;br&gt;&lt;br&gt;
+  &lt;label for=&quot;huespedes&quot;&gt;Huéspedes:&lt;/label&gt;
+  &lt;input type=&quot;text&quot; id=&quot;huespedes&quot; name=&quot;huespedes&quot;&gt;&lt;br&gt;&lt;br&gt;
+  &lt;label for=&quot;porcentajeR&quot;&gt;Porcentaje de reservas:&lt;/label&gt;
+  &lt;input type=&quot;text&quot; id=&quot;porcentajeR&quot; name=&quot;porcentajeR&quot;&gt;&lt;br&gt;&lt;br&gt;
+  &lt;label for=&quot;puntaje&quot;&gt;Puntaje:&lt;/label&gt;
+  &lt;input type=&quot;text&quot; id=&quot;puntaje&quot; name=&quot;puntaje&quot;&gt;&lt;br&gt;&lt;br&gt;
+  &lt;label for=&quot;es_finde&quot;&gt;¿Es fin de semana?:&lt;/label&gt;
+  &lt;input type=&quot;checkbox&quot; id=&quot;es_finde&quot; name=&quot;es_finde&quot;&gt;&lt;br&gt;&lt;br&gt;
+  &lt;input type=&quot;button&quot; value=&quot;Obtener predicción&quot; onclick=&quot;procesar_valores()&quot;&gt;&lt;br&gt;&lt;br&gt;
+&lt;/form&gt;
+&#39;)</code></pre>
+
+<form>
+  <label for="barrio">Barrio:</label>
+  <input type="text" id="barrio" name="barrio"><br><br>
+  <label for="precio">Precio:</label>
+  <input type="text" id="precio" name="precio"><br><br>
+  <label for="fecha">Fecha:</label>
+  <input type="date" id="fecha" name="fecha"><br><br>
+  <label for="min_noches">Mínimo de noches:</label>
+  <input type="text" id="min_noches" name="min_noches"><br><br>
+  <label for="max_noches">Máximo de noches:</label>
+  <input type="text" id="max_noches" name="max_noches"><br><br>
+  <label for="huespedes">Huéspedes:</label>
+  <input type="text" id="huespedes" name="huespedes"><br><br>
+  <label for="porcentajeR">Porcentaje de reservas:</label>
+  <input type="text" id="porcentajeR" name="porcentajeR"><br><br>
+  <label for="puntaje">Puntaje:</label>
+  <input type="text" id="puntaje" name="puntaje"><br><br>
+  <label for="es_finde">¿Es fin de semana?:</label>
+  <input type="checkbox" id="es_finde" name="es_finde"><br><br>
+  <input type="button" value="Obtener predicción" onclick="procesar_valores()"><br><br>
+</form>
+
+</div>
 
 
 
