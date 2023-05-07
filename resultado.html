@@ -1,0 +1,16 @@
+{r}
+# Obtener los valores ingresados por el usuario
+week <- as.numeric(input$week)
+month <- as.numeric(input$month)
+price <- as.numeric(input$price)
+percent_booked <- as.numeric(input$percent_booked)
+cluster <- as.numeric(input$cluster)
+accommodates <- as.numeric(input$accommodates)
+tipo_estadia <- input$tipo_estadia
+rating <- as.numeric(input$rating)
+
+# Calcular la predicción utilizando la función de predicción
+prediccion <- prediccion_disponible(week, month, price, percent_booked,cluster,accommodates,tipo_estadia, rating)
+
+# Mostrar el resultado de la predicción
+tags$h2(paste0("La predicción de disponibilidad es: ", prediccion))

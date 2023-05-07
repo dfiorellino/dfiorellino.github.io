@@ -1,8 +1,5 @@
 ---
-title: "Mi sitio web"
-output: 
-  html_document:
-    theme: cosmo
+title: "My website"
 ---
 
 Hello, bienvenidos!
@@ -11,147 +8,53 @@ Hello, bienvenidos!
 
 Aquí va el texto y los elementos que quieres incluir en tu sitio web.
 
+
+
+
 ```{r}
-# Cargar librerías y datos necesarios
-#install.packages("shiny")
-library(shiny)
-library(htmltools)
-#datos_regre <- read.csv("datos.csv")
+#install.packages(c("shiny", "caret", "htmltools"))
+library(caret)
+library(tidyverse)
 
-# Modelo de regresión logística
-modelo_logistico <- glm(target ~ . , data = datos_regre, family = binomial)
+# Carga el modelo previamente ajustado y la funcion
 
-# Función de predicción
-prediccion_disponible <- function(barrio, precio, fecha, min_noches, max_noches, huespedes, porcentajeR, puntaje, es_finde) {
-   barrio_binario <- c(0, 0, 0, 0, 0)
-  if (barrio == "Belgrano") {
-    barrio_binario[1] <- 1
-  } else if (barrio == "Recoleta") {
-    barrio_binario[2] <- 1
-  } else if (barrio == "Colegiales") {
-    barrio_binario[3] <- 1
-  } else if (barrio == "Nunez") {
-    barrio_binario[4] <- 1
-  } else if (barrio == "Retiro") {
-    barrio_binario[5] <- 1
-  } else {
-    stop("Barrio inválido.")
-  }
-  
-  # Crear un data frame con los valores de las variables predictoras
-  datos_prediccion <- data.frame(
-    Belgrano = barrio_binario[1],
-    Recoleta = barrio_binario[2],
-    Colegiales = barrio_binario[3],
-    Nunez = barrio_binario[4],
-    Retiro = barrio_binario[5],
-    dolar_price = precio,
-    date = as.Date(fecha),
-    minimum_nights.y = min_noches,
-    maximum_nights.y = max_noches,
-    accommodates = huespedes,
-    percent_booked = porcentajeR,
-    review_scores_rating = puntaje,
-    es_finde = es_finde)
-  
-  # Hacer la predicción utilizando el modelo ajustado
-  prediccion <- predict(modelo_logistico, newdata = datos_prediccion, type = "response")
-  
-  # Devolver la predicción
-  return(prediccion)
-}
+modelo_logistico <- readRDS("modelo_logistico.rds")
 
-
-# Función para procesar los valores del formulario
-procesar_valores <- function(valores) {
-  procesar_valores <- function() {
-  # Obtener los valores ingresados por el usuario desde la página web
-  barrio <- input$barrio
-  precio <- input$precio
-  fecha <- input$fecha
-  min_noches <- input$min_noches
-  max_noches <- input$max_noches
-  huespedes <- input$huespedes
-  porcentajeR <- input$porcentajeR
-  puntaje <- input$puntaje
-  es_finde <- input$es_finde
-  
-  # Realizar la predicción utilizando la función creada en el archivo "modelos.R"
-  prediccion <- prediccion_disponible(barrio, precio, fecha, min_noches, max_noches, huespedes, porcentajeR, puntaje, es_finde)
-  
-  # Devolver el resultado de la predicción
-  return(prediccion)
-}
-}
-
-# Crear el formulario
-formulario <- tags$form(
-  tags$h2("Realiza una predicción"),
-  tags$label("Barrio:"),
-  tags$input(type = "text", name = "barrio", value = ""),
-  tags$label("Precio:"),
-  tags$input(type = "number", name = "precio", value = ""),
-  tags$label("Fecha:"),
-  tags$input(type = "date", name = "fecha", value = ""),
-  tags$label("Mínimo de noches:"),
-  tags$input(type = "number", name = "min_noches", value = ""),
-  tags$label("Máximo de noches:"),
-  tags$input(type = "number", name = "max_noches", value = ""),
-  tags$label("Huespedes:"),
-  tags$input(type = "number", name = "huespedes", value = ""),
-  tags$label("Porcentaje de reservas:"),
-  tags$input(type = "number", name = "porcentajeR", value = ""),
-  tags$label("Puntaje de reviews:"),
-  tags$input(type = "number", name = "puntaje", value = ""),
-  tags$label("¿Es fin de semana?"),
-  tags$input(type = "checkbox", name = "es_finde", value = ""),
-  tags$input(type = "submit", value = "Realizar predicción")
-)
-
-# Procesar los valores del formulario al hacer submit
-valores <- reactive({
-  req(input$submit)
-  procesar_valores(input)
-})
-
-# Crear contenedor HTML para mostrar el resultado
-tags$div(id = "resultado")
-
-# Crear función reactiva para procesar los valores del formulario al hacer submit
-valores <- reactive({
-  req(input$submit)
-  procesar_valores(input)
-})
-
-# Crear función observadora para actualizar el resultado cada vez que cambian los valores de entrada
-observe({
-  # Obtener el resultado de la función prediccion_disponible()
-  resultado <- prediccion_disponible(valores()$barrio, valores()$precio, valores()$fecha, valores()$min_noches, valores()$max_noches, valores()$huespedes, valores()$porcentajeR, valores()$puntaje, valores()$es_finde)
-  
-  # Verificar que el resultado no sea NA antes de compararlo con 0.5
-  if (!is.na(resultado) && resultado > 0.5) {
-    # Actualizar el contenido del contenedor HTML con el mensaje correspondiente
-    tags$script(sprintf("document.getElementById('%s').innerHTML = 'Es probable que el alojamiento se reserve'", "resultado"))
-  } else {
-    # Actualizar el contenido del contenedor HTML con el mensaje correspondiente
-    tags$script(sprintf("document.getElementById('%s').innerHTML = 'Es probable que el alojamiento no se reserve'", "resultado"))
-  }
-})
-
-
-
-# Mostrar el formulario
-HTML(as.character(formulario))
-
-# Mostrar el resultado de la predicción
-observeEvent(input$submit, {
-  resultado <- prediccion_disponible(valores()$barrio, valores()$precio, valores()$fecha, valores()$min_noches, valores()$max_noches, valores()$huespedes, valores()$porcentajeR, valores()$puntaje, valores()$es_finde)
-  if (!is.na(resultado) && resultado > 0.5) {
-    output$prediccion <- renderText("Es probable que el alojamiento se reserve")
-  } else {
-    output$prediccion <- renderText("Es probable que el alojamiento no se reserve")
-  }
-})
-
+prediccion_disponible <- readRDS("prediccion_disponible.rds")
 ```
+
+
+
+```{r}
+# Crear el formulario HTML
+tags$form(
+  action = "resultado.html",
+  method = "get",
+  tags$h2("Predicción de disponibilidad"),
+  tags$label("Semana"),
+  tags$input(type = "number", name = "week"),
+  tags$label("Mes"),
+  tags$input(type = "number", name = "month"),
+  tags$label("Precio en dólares"),
+  tags$input(type = "number", name = "price"),
+  tags$label("Porcentaje reservado"),
+  tags$input(type = "number", name = "percent_booked"),
+  tags$label("Cluster"),
+  tags$input(type = "number", name = "cluster"),
+  tags$label("Alojamiento"),
+  tags$input(type = "number", name = "accommodates"),
+  tags$label("Tipo de estadia"),
+  tags$select(
+    name = "tipo_estadia",
+    tags$option("corta"),
+    tags$option("media 1"),
+    tags$option("media 2")
+  ),
+  tags$label("Rating"),
+  tags$input(type = "number", name = "rating"),
+  tags$input(type = "submit", value = "Calcular predicción")
+)
+```
+
+
 
