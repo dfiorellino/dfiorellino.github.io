@@ -1,4 +1,6 @@
 
+```{r}
+
 # Obtener los valores ingresados por el usuario
 week <- as.numeric(input$week)
 month <- as.numeric(input$month)
@@ -14,3 +16,4 @@ prediccion <- prediccion_disponible(week, month, price, percent_booked,cluster,a
 
 # Mostrar el resultado de la predicción
 tags$h2(paste0("La predicción de disponibilidad es: ", prediccion))
+```

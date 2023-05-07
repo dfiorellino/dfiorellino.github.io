@@ -28,7 +28,7 @@ prediccion_disponible <- readRDS("prediccion_disponible.rds")
 ```{r}
 # Crear el formulario HTML
 tags$form(
-  action = "resultado.html",
+  action = "resultado.Rmd",
   method = "get",
   tags$h2("Predicción de disponibilidad"),
   tags$label("Semana"),

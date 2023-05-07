@@ -10,8 +10,9 @@
 
 
 
+<meta name="date" content="2023-05-07" />
 
-<title>My website</title>
+<title>Modelo</title>
 
 <script src="site_libs/header-attrs-2.21/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -260,77 +261,128 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">My website</h1>
+<h1 class="title toc-ignore">Modelo</h1>
+<h4 class="date">2023-05-07</h4>
 
 </div>
 
 
-<p>Hello, bienvenidos!</p>
-<div id="sección-de-contenido" class="section level1">
-<h1>Sección de contenido</h1>
-<p>Aquí va el texto y los elementos que quieres incluir en tu sitio
-web.</p>
-<pre class="r"><code>#install.packages(c(&quot;shiny&quot;, &quot;caret&quot;, &quot;htmltools&quot;))
-library(caret)
-library(tidyverse)
+<div id="r-markdown" class="section level2">
+<h2>R Markdown</h2>
+<p>This is an R Markdown document. Markdown is a simple formatting
+syntax for authoring HTML, PDF, and MS Word documents. For more details
+on using R Markdown see <a href="http://rmarkdown.rstudio.com"
+class="uri">http://rmarkdown.rstudio.com</a>.</p>
+<p>When you click the <strong>Knit</strong> button a document will be
+generated that includes both content as well as the output of any
+embedded R code chunks within the document. You can embed an R code
+chunk like this:</p>
+<pre class="r"><code>summary(cars)</code></pre>
+<pre><code>##      speed           dist       
+##  Min.   : 4.0   Min.   :  2.00  
+##  1st Qu.:12.0   1st Qu.: 26.00  
+##  Median :15.0   Median : 36.00  
+##  Mean   :15.4   Mean   : 42.98  
+##  3rd Qu.:19.0   3rd Qu.: 56.00  
+##  Max.   :25.0   Max.   :120.00</code></pre>
+</div>
+<div id="including-plots" class="section level2">
+<h2>Including Plots</h2>
+<p>You can also embed plots, for example:</p>
+<p><img src="modelo_files/figure-html/pressure-1.png" width="672" /></p>
+<p>Note that the <code>echo = FALSE</code> parameter was added to the
+code chunk to prevent printing of the R code that generated the
+plot.</p>
+<pre class="r"><code># Crear función de predicción
+prediccion_disponible &lt;- function(week, month, price, percent_booked,cluster,accommodates,tipo_estadia, rating) {
+  # Transformar tipo_habitacion y barrio en variables binarias
+  
+  estadia_binaria &lt;- c(0, 0, 0)
+  if (tipo_estadia == &quot;corta&quot;) {
+    estadia_binaria[1] &lt;- 1
+  } else if (tipo_estadia == &quot;media 1&quot;) {
+    estadia_binaria[2] &lt;- 1
+  } else if (tipo_estadia == &quot;media 2&quot;) {
+    estadia_binaria[3] &lt;- 1
+  } else {
+    stop(&quot;estadia inválida.&quot;)
+  }
+  
+    meses_bin &lt;- c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+  if (month == 1) {
+    meses_bin[1] &lt;- 1
+  } else if (month == 2) {
+    meses_bin[2] &lt;- 1
+  } else if (month == 3) {
+    meses_bin[3] &lt;- 1
+  } else if (month == 4) {
+    meses_bin[4] &lt;- 1
+  } else if (month == 5) {
+    meses_bin[5] &lt;- 1
+  } else if (month == 6) {
+    meses_bin[6] &lt;- 1
+  } else if (month == 7) {
+    meses_bin[7] &lt;- 1
+  } else if (month == 8) {
+    meses_bin[8] &lt;- 1
+  } else if (month == 9) {
+    meses_bin[9] &lt;- 1
+  } else if (month == 10) {
+    meses_bin[10] &lt;- 1
+  } else if (month == 11) {
+    meses_bin[11] &lt;- 1
+  } else {
+    stop(&quot;mes inválido.&quot;)
+  }
+  
+    cluster_binaria &lt;- c(0, 0, 0, 0)
+  if (cluster == 1) {
+    cluster_binaria[1] &lt;- 1
+  } else if (cluster == 2) {
+    cluster_binaria[2] &lt;- 1
+  } else if (cluster == 3) {
+    cluster_binaria[3] &lt;- 1
+  } else if (cluster == 4) {
+    cluster_binaria[4] &lt;- 1
+  } else {
+    stop(&quot;cluster inválido.&quot;)
+  }
+  
+  # Crear un data frame con los valores de las variables predictoras
+  datos_prediccion &lt;- data.frame(week = week,
+                                 estadia_corta = estadia_binaria[1],
+                                 estadia_media_1 = estadia_binaria[2],
+                                 estadia_media_2 = estadia_binaria[3],
+                                 prom_month_factor_1 = meses_bin[1],
+                                 prom_month_factor_2 = meses_bin[2],
+                                 prom_month_factor_3 = meses_bin[3],
+                                 prom_month_factor_4 = meses_bin[4],
+                                 prom_month_factor_5 = meses_bin[5],
+                                 prom_month_factor_6 = meses_bin[6],
+                                 prom_month_factor_7 = meses_bin[7],
+                                 prom_month_factor_8 = meses_bin[8],
+                                 prom_month_factor_9 = meses_bin[9],
+                                 prom_month_factor_10 = meses_bin[10],
+                                 prom_month_factor_11 = meses_bin[11],
+                                 dolar_price = price,
+                                 cluster_1 = cluster_binaria[1],
+                                 cluster_2 = cluster_binaria[2],
+                                 cluster_3 = cluster_binaria[3],
+                                 cluster_4 = cluster_binaria[4],
+                                 date = as.Date(fecha),
+                                 accommodates = accommodates,
+                                 percent_booked = percent_booked,
+                                 review_scores_rating = rating)
+  
+  # Hacer la predicción utilizando el modelo ajustado
+  prediccion &lt;- predict(xgb1, newdata = datos_prediccion, type = &quot;response&quot;)
+  
+  # Devolver la predicción
+  return(prediccion)
+}
 
-# Carga el modelo previamente ajustado y la funcion
-
-modelo_logistico &lt;- readRDS(&quot;modelo_logistico.rds&quot;)
-
-prediccion_disponible &lt;- readRDS(&quot;prediccion_disponible.rds&quot;)</code></pre>
-<pre class="r"><code># Crear el formulario HTML
-tags$form(
-  action = &quot;resultado.html&quot;,
-  method = &quot;get&quot;,
-  tags$h2(&quot;Predicción de disponibilidad&quot;),
-  tags$label(&quot;Semana&quot;),
-  tags$input(type = &quot;number&quot;, name = &quot;week&quot;),
-  tags$label(&quot;Mes&quot;),
-  tags$input(type = &quot;number&quot;, name = &quot;month&quot;),
-  tags$label(&quot;Precio en dólares&quot;),
-  tags$input(type = &quot;number&quot;, name = &quot;price&quot;),
-  tags$label(&quot;Porcentaje reservado&quot;),
-  tags$input(type = &quot;number&quot;, name = &quot;percent_booked&quot;),
-  tags$label(&quot;Cluster&quot;),
-  tags$input(type = &quot;number&quot;, name = &quot;cluster&quot;),
-  tags$label(&quot;Alojamiento&quot;),
-  tags$input(type = &quot;number&quot;, name = &quot;accommodates&quot;),
-  tags$label(&quot;Tipo de estadia&quot;),
-  tags$select(
-    name = &quot;tipo_estadia&quot;,
-    tags$option(&quot;corta&quot;),
-    tags$option(&quot;media 1&quot;),
-    tags$option(&quot;media 2&quot;)
-  ),
-  tags$label(&quot;Rating&quot;),
-  tags$input(type = &quot;number&quot;, name = &quot;rating&quot;),
-  tags$input(type = &quot;submit&quot;, value = &quot;Calcular predicción&quot;)
-)</code></pre>
-<form action="resultado.html" method="get">
-<h2>Predicción de disponibilidad</h2>
-<label>Semana</label>
-<input type="number" name="week"/>
-<label>Mes</label>
-<input type="number" name="month"/>
-<label>Precio en dólares</label>
-<input type="number" name="price"/>
-<label>Porcentaje reservado</label>
-<input type="number" name="percent_booked"/>
-<label>Cluster</label>
-<input type="number" name="cluster"/>
-<label>Alojamiento</label>
-<input type="number" name="accommodates"/>
-<label>Tipo de estadia</label>
-<select name="tipo_estadia">
-<option>corta</option>
-<option>media 1</option>
-<option>media 2</option>
-</select>
-<label>Rating</label>
-<input type="number" name="rating"/>
-<input type="submit" value="Calcular predicción"/>
-</form>
+saveRDS(prediccion_disponible, &quot;prediccion_disponible.rds&quot;)
+saveRDS(xgb1, &quot;modelo_logistico.rds&quot;)</code></pre>
 </div>
 
 
